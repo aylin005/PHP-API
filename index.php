@@ -2,9 +2,10 @@
 declare(strict_types=1); //forzar tipos estrictos
 
 //carga automaticamente las clases que se usan en el proyecto
-spl_autoload_register(function ($class) { 
-    require __DIR__ . "/src/$class.php";
-});
+require "app/controllers/ProductController.php";
+require "app/models/ProductGateway.php";
+require "app/core/Database.php";
+require "app/core/ErrorHandler.php";
 
 //maneja las excepciones
 set_error_handler("ErrorHandler::handleError");
@@ -25,9 +26,11 @@ $id = $parts[3] ?? null;
 
 /////////////////////////////////////////////////////////////////////////
 //database connection
-$database = new Database("localhost","phpprueba","root","rootBD","3306");
-//$database->getConnection();
+$config = require "app/config/config.php"; 
 
+$database = new Database($config['db']['connection1']);
+
+//$database->getConnection();
 $gateway = new ProductGateway($database);
 
 //main controller
