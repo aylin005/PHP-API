@@ -1,0 +1,9 @@
+# Ignorar la carpeta de dependencias de Composer
+/vendor/
+
+# Archivos de configuración del entorno (buenas prácticas)
+# Si en el futuro usas variables de entorno, no las subas
+.env
+
+# Carpetas de configuración de IDEs
+.vscode/
