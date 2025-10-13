@@ -1,26 +1,28 @@
 <?php
-
 class ProductController
 {
-    public function __construct(private ProductGateway $gateway)
-    {
+    private ProductGateway $gateway;
 
+    public function __construct(ProductGateway $gateway)
+    {
+        $this->gateway = $gateway;
     }
 
-    public function processRequest(string $method, ?string $id):void
+    public function processRequest(string $method, ?string $id = null): void
     {
-        if ($id)
+        if ($id !== null) {
             $this->processResourceRequest($method, $id);
-        else
+        } else {
             $this->processCollectionRequest($method);
+        }
     }
 
     private function processResourceRequest(string $method, string $id): void
     {
-        $product = $this -> gateway->get($id);
+        $product = $this->gateway->get($id);
 
-        if(!$product) {
-            http_response_code(404); //not found
+        if (!$product) {
+            http_response_code(404);
             echo json_encode(["message" => "Product not found"]);
             return;
         }
@@ -31,18 +33,17 @@ class ProductController
                 break;
 
             case "PATCH":
-                $data = (array)json_decode(file_get_contents("php://input"), true); //if it's null, convert to empty array
-
+                $data = (array) json_decode(file_get_contents("php://input"), true);
                 $errors = $this->getValidationErrors($data, false);
 
                 if (!empty($errors)) {
-                    http_response_code(422); //422 unprocessable entity
+                    http_response_code(422);
                     echo json_encode(["errors" => $errors]);
                     break;
                 }
 
                 $rows = $this->gateway->update($product, $data);
-                
+
                 echo json_encode([
                     "message" => "Product $id updated",
                     "rows" => $rows
@@ -57,10 +58,10 @@ class ProductController
                     "rows" => $rows
                 ]);
                 break;
-            
+
             default:
-                http_response_code(405); //405 method not allowed
-                header("Allow: GET"); //indicate the allowed methods on this endpoint
+                http_response_code(405);
+                header("Allow: GET, PATCH, DELETE");
                 break;
         }
     }
@@ -71,32 +72,29 @@ class ProductController
             case "GET":
                 echo json_encode($this->gateway->getAll());
                 break;
-            
-            case "POST":
-                //$data = $_POST; //data from the request body
-                //data from the request body json format associative array
-                $data = (array)json_decode(file_get_contents("php://input"), true); //if it's null, convert to empty array
 
+            case "POST":
+                $data = (array) json_decode(file_get_contents("php://input"), true);
                 $errors = $this->getValidationErrors($data);
 
                 if (!empty($errors)) {
-                    http_response_code(422); //422 unprocessable entity
+                    http_response_code(422);
                     echo json_encode(["errors" => $errors]);
                     break;
                 }
 
                 $id = $this->gateway->create($data);
-                
-                http_response_code(201); //201 created
+
+                http_response_code(201);
                 echo json_encode([
                     "message" => "Product created",
                     "id" => $id
                 ]);
                 break;
-            
+
             default:
-                http_response_code(405); //405 method not allowed
-                header("Allow: GET, POST"); //indicate the allowed methods on this endpoint
+                http_response_code(405);
+                header("Allow: GET, POST");
                 break;
         }
     }
