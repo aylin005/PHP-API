@@ -1,5 +1,8 @@
 <?php
-
+namespace App\Models;
+use App\Core\Database;
+use PDO;
+use Exception;
 class ProductGateway
 {
     private PDO $conn;

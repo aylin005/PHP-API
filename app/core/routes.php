@@ -1,12 +1,10 @@
 <?php 
-
-require_once __DIR__ . '\Router.php';
-use Core\Router;
+use App\Core\Router;
+use App\Core\Database;
+use App\Models\ProductGateway;
+use App\Controllers\ProductController;
 
 $config = require_once __DIR__ . '\..\config\config.php';
-require_once __DIR__ . '\Database.php';
-require_once __DIR__ . '\..\models\ProductGateway.php';
-require_once __DIR__ . '\..\controllers\ProductController.php';
 
 // Crear una instancia compartida de Database (reuse)
 $database = new Database($config['db']['connection1']);

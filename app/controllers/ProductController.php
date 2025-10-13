@@ -1,4 +1,7 @@
 <?php
+namespace App\Controllers;
+use App\Models\ProductGateway;
+
 class ProductController
 {
     private ProductGateway $gateway;

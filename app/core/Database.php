@@ -1,5 +1,7 @@
 <?php
-
+namespace App\Core;
+use PDO;
+use PDOException;
 class Database
 {
     // 1. Add a property to hold the PDO connection object.

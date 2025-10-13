@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Core;
+
+use Throwable;
+use ErrorException;
+
 class ErrorHandler
 {
     public static function handleException(Throwable $exception): void

@@ -1,0 +1,9 @@
+{
+    "name": "prueba/php-api",
+    "description": "Una API REST hecha en PHP.",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
